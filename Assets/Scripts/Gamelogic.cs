@@ -9,13 +9,13 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public int energy;
 
     [SerializeField] int maxNodes;
-    [SerializeField] int maxConnections;
+    [SerializeField] public int maxConnections;
 
     [SerializeField] float playFieldSize;
     [SerializeField] float deadZone;
     [SerializeField] float twoArea;
     [SerializeField] float oneArea;
-    
+
     [SerializeField] int waterNodes;
 
     [SerializeField] int turnNodes;
@@ -23,15 +23,14 @@ public class Gamelogic : MonoBehaviour
 
     List<Node> totalNodes = new List<Node>();
 
+    public List<Node> threesList = new();
+    public List<Node> twosList = new();
+    public List<Node> onesList = new();
+
     public Node node;
 
     public void instantiatePlayGround() {
 
-        //get maxNodes
-        //get a radius and get 500 random positions within the circle
-        //instantiate 500 nodes
-        //get the areas and check if any nodes overlap
-        //adjust Cost depending on area
         //change some of the instantiated nodes to "water" type
         //change some "basic" type nodes 
 
@@ -45,39 +44,31 @@ public class Gamelogic : MonoBehaviour
             Vector2 newNodeposition = findNewNodePosition();
             Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
             totalNodes.Add(newNode);
-
         }
+
+        foreach(Node node in totalNodes)
+		{
+            node.gamelogic = this;
+		}
 
     }
 
+	private void Awake()
+	{
+        Debug.Log(energy);
+	}
 
-    void Start()
+
+	void Start()
     {
-
-
         instantiatePlayGround();
-
-        // 3 cost area
-        foreach (Node node in totalNodes) {
-            node.cost = 3;
-        }
-
-        // 2 cost area
-        Collider2D[] twos = (Physics2D.OverlapCircleAll (new Vector2(0, 0), (playFieldSize*0.8f)));
-        foreach (var hit in twos) {
-            Node node = hit.transform.parent.GetComponent<Node>();
-            node.cost = 2;
-        }
-
-        //one cost area
-        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.5f)));
-        foreach (var hit in ones){
-            Node node = hit.transform.parent.GetComponent<Node>();
-            node.cost = 1;
-        }
+        createCostAreas();
+        makeNodeTypes();
+        makeNodeModifiers();
 
         var startNode = totalNodes[0];
         startNode.connectedToRoot = true;
+        startNode.owner = "Player";
         var connectedNodes = new List<Node>() { totalNodes[0] };
         for(int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
 		{
@@ -92,7 +83,6 @@ public class Gamelogic : MonoBehaviour
 				}
 			}
 		}
-
     }
 
 
@@ -120,6 +110,110 @@ public class Gamelogic : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void createCostAreas() {
+        // 3 cost area
+        foreach (Node node in totalNodes)
+        {
+            node.cost = 3;
+        }
+
+        // 2 cost area
+        Collider2D[] twos = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.9f)));
+        foreach (var hit in twos)
+        {
+            Node node = hit.GetComponent<Node>();
+            node.cost = 2;
+        }
+
+        //one cost area
+        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.7f)));
+        foreach (var hit in ones)
+        {
+            Node node = hit.GetComponent<Node>();
+            node.cost = 1;
+        }
+
+        foreach (Node node in totalNodes) {
+
+            if (node.cost == 3) {
+                threesList.Add(node);
+            }
+
+            else if (node.cost == 2) {
+                twosList.Add(node);
+            }
+
+            else onesList.Add(node);
+
+        }
+    }
+
+    public void makeNodeTypes() {
+
+        for (int w = 0; w < waterNodes; w++)
+        {
+            int r = Random.Range(0, totalNodes.Count);
+            totalNodes[r].type = Node.typeEnum.water;
+            totalNodes[r].SetType(Node.typeEnum.water);
+        }
+
+    }
+
+    public void makeNodeModifiers(){
+        
+        //might not ed up with exatly as many a specified, as they can be overwritten
+
+        for (int t = 0; t < turnNodes; t++) {
+            int r = Random.Range(0, 100);
+
+            if (r > 50) {
+                Node target = getRandomFromList(threesList);
+                target.modifier = Node.modifierEnum.turn;
+            }
+
+            else if (r < 15) {
+                Node target = getRandomFromList(onesList);
+                target.modifier = Node.modifierEnum.turn;
+            }
+
+            else {
+                Node target = getRandomFromList(twosList);
+                target.modifier = Node.modifierEnum.turn;
+            }
+        }
+
+
+        for (int m = 0; m < multNodes; m++)
+        {
+            int r = Random.Range(0, 100);
+
+            if (r > 50)
+            {
+                Node target = getRandomFromList(threesList);
+                target.modifier = Node.modifierEnum.multi;
+            }
+
+            else if (r < 15)
+            {
+                Node target = getRandomFromList(onesList);
+                target.modifier = Node.modifierEnum.multi;
+            }
+
+            else
+            {
+                Node target = getRandomFromList(twosList);
+                target.modifier = Node.modifierEnum.multi;
+            }
+        }
+
+    }
+
+    public Node getRandomFromList(List<Node> nodeList) {
+        int r = Random.Range(0, nodeList.Count);
+        Node returnNode = nodeList[r];
+        return returnNode;
     }
 
 }
