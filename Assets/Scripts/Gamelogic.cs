@@ -29,27 +29,6 @@ public class Gamelogic : MonoBehaviour
 
     public Node node;
 
-    public void instantiatePlayGround() {
-
-        //change some of the instantiated nodes to "water" type
-        //change some "basic" type nodes 
-
-
-        Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
-        totalNodes.Add(startNode);
-
-        for (int mn = 0; mn < maxNodes-1; mn++) {
-
-            //get random position on playingField
-            Vector2 newNodeposition = findNewNodePosition();
-            Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
-            totalNodes.Add(newNode);
-
-        }
-
-    }
-
-
     void Start()
     {
         instantiatePlayGround();
@@ -77,10 +56,32 @@ public class Gamelogic : MonoBehaviour
     }
 
 
+    public void instantiatePlayGround() {
+
+        //change some of the instantiated nodes to "water" type
+        //change some "basic" type nodes 
+
+        Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
+        totalNodes.Add(startNode);
+
+        for (int mn = 0; mn < maxNodes-1; mn++) {
+
+            //get random position on playingField
+            Vector2 newNodeposition = findNewNodePosition();
+            Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
+            totalNodes.Add(newNode);
+
+        }
+
+    }
+
+
     Vector2 findNewNodePosition() {
         Vector2 newPosition = Random.insideUnitCircle * playFieldSize;
 
-        while (checkOverlap(newPosition))
+        checkOverlap(newPosition);
+
+        while(checkOverlap(newPosition))
         {
             newPosition = Random.insideUnitCircle * playFieldSize;
         }
@@ -93,15 +94,14 @@ public class Gamelogic : MonoBehaviour
 
         //check position for any other nodes
         Collider2D[] hits = (Physics2D.OverlapCircleAll(newPosition, deadZone));
-        for (int i = 0; i < hits.Length; i++)
-        {
-            if (hits[i].name == "Sprite")
-            {
-                return true;
-            }
+
+        if (hits.Length > 0) {
+            return true;
         }
         return false;
+       
     }
+
 
     public void createCostAreas() {
         // 3 cost area
@@ -141,6 +141,7 @@ public class Gamelogic : MonoBehaviour
         }
     }
 
+
     public void makeNodeTypes() {
 
         for (int w = 0; w < waterNodes; w++)
@@ -151,6 +152,7 @@ public class Gamelogic : MonoBehaviour
         }
 
     }
+
 
     public void makeNodeModifiers(){
         
@@ -200,6 +202,7 @@ public class Gamelogic : MonoBehaviour
         }
 
     }
+
 
     public Node getRandomFromList(List<Node> nodeList) {
         int r = Random.Range(0, nodeList.Count);

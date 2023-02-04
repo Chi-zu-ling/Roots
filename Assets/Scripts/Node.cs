@@ -92,11 +92,7 @@ public class Node : MonoBehaviour
             }
             connectionRadius += 1;
         }
-        //check for a radius around node
-        //get all nodes available ("possibleConnections")
-        //get random value between 1 and "maxConnections"
-        //get random nodes from "possibleConnections"
-        //make connection indicators?
+       
     }
 
     public void connectTo(Node node) {
