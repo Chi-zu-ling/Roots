@@ -129,7 +129,7 @@ public class Node : MonoBehaviour
 			connectionStatus = ConnectionStatus.None;
 			Highlight(Color.red);
 		}
-
+		Popup.instance.gameObject.SetActive(true);
 		Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
 
 	}
@@ -141,6 +141,7 @@ public class Node : MonoBehaviour
 		{
 			node.DisableHighlight();
 		}
+		Popup.instance.gameObject.SetActive(true);
 	}
 
 	public void MakeConnections()
