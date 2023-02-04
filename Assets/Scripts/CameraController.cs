@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
     private Camera playerCam;
     private Vector3 recenterCoords;
     private float defaultZoom;
+    private float targZoom;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +23,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        playerCam.orthographicSize = Mathf.Lerp(playerCam.orthographicSize, targZoom, Time.deltaTime * 5);
     }
 
     public void OnCameraPan(InputAction.CallbackContext context)
@@ -37,9 +38,9 @@ public class CameraController : MonoBehaviour
     public void OnCameraZoom(InputAction.CallbackContext context)
     {
         float MoveDirection = context.ReadValue<Vector2>().y;
-        if (playerCam.orthographicSize >= minZoom)
+        if (targZoom >= minZoom)
         {
-            playerCam.orthographicSize += zoomSpeed * MoveDirection;
+            targZoom += zoomSpeed * MoveDirection;
             //playerCam.transform.position = new Vector3(0, 0, MoveDirection) * camSpeed + playerCam.transform.position;
         }
         else if(MoveDirection > 0)
@@ -47,7 +48,7 @@ public class CameraController : MonoBehaviour
             playerCam.orthographicSize += zoomSpeed * MoveDirection;
             //playerCam.transform.position = new Vector3(0, 0, MoveDirection) * camSpeed + playerCam.transform.position;
         }
-        playerCam.orthographicSize = Mathf.Clamp(playerCam.orthographicSize, minZoom, 100);
+        targZoom = Mathf.Clamp(playerCam.orthographicSize, minZoom, 100);
 
     }
 
@@ -59,6 +60,6 @@ public class CameraController : MonoBehaviour
     public void OnRecenterCamera()
     {
         playerCam.transform.position = recenterCoords;
-        playerCam.orthographicSize = defaultZoom;
+        playerCam.targZoom = defaultZoom;
     }
 }

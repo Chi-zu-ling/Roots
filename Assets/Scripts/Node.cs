@@ -88,7 +88,6 @@ public class Node : MonoBehaviour
 
 	private void OnMouseEnter()
 	{
-		Highlight(Color.green);
 		var bridgableNodes = GetNodesInRadius(MaxConnectionRadius);
 		var canConnect = false;
 		
@@ -107,12 +106,13 @@ public class Node : MonoBehaviour
 		// Red if not at all
 		if (canConnect)
 		{
-			var mustBridge = false;
+			var mustBridge = true;
 			foreach (Node node in connectedNodes)
 			{
 				if (node.owner == "Player")
 				{
 					mustBridge = false;
+					break;
 				}
 			}
 			if (mustBridge)
