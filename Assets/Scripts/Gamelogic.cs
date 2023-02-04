@@ -104,7 +104,7 @@ public class Gamelogic : MonoBehaviour
         Collider2D[] hits = (Physics2D.OverlapCircleAll(newPosition, deadZone));
         for (int i = 0; i < hits.Length; i++)
         {
-            if (hits[i].name == "Sprite")
+            if (hits[i].GetComponent<Node>() != null)
             {
                 return true;
             }

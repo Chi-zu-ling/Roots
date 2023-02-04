@@ -141,7 +141,7 @@ public class Node : MonoBehaviour
 		{
 			node.DisableHighlight();
 		}
-		Popup.instance.gameObject.SetActive(true);
+		Popup.instance.gameObject.SetActive(false);
 	}
 
 	public void MakeConnections()
