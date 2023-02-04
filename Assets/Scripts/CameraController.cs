@@ -60,6 +60,6 @@ public class CameraController : MonoBehaviour
     public void OnRecenterCamera()
     {
         playerCam.transform.position = recenterCoords;
-        playerCam.targZoom = defaultZoom;
+        targZoom = defaultZoom;
     }
 }
