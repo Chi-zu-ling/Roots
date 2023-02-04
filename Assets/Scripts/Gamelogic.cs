@@ -156,7 +156,7 @@ public class Gamelogic : MonoBehaviour
         {
             int r = Random.Range(0, totalNodes.Count);
             totalNodes[r].type = Node.typeEnum.water;
-            totalNodes[r].gameObject.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = new Color32(100,120, 255, 255);
+            totalNodes[r].SetType(Node.typeEnum.water);
         }
 
     }

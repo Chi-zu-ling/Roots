@@ -6,7 +6,10 @@ public class Node : MonoBehaviour
 
 	public Gamelogic gamelogic;
 	[SerializeField] GameObject connectionPrefab;
+	[SerializeField] SpriteRenderer sprite;
 	[SerializeField] SpriteRenderer highlight;
+	[SerializeField] Sprite waterSprite;
+	[SerializeField] Sprite NutrientSprite;
 	public List<Node> connectedNodes = new();
 	public List<Connection> connections = new();
 	public bool connectedToRoot = false;
@@ -32,6 +35,16 @@ public class Node : MonoBehaviour
 		turn,
 		multi
 	}
+
+	enum ConnectionStatus
+	{
+		Direct,
+		Bridge,
+		None,
+	}
+
+	ConnectionStatus connectionStatus = ConnectionStatus.None;
+	Node nearestConnectableNode;
 
 	// Start is called before the first frame update
 	void Start()
@@ -104,15 +117,21 @@ public class Node : MonoBehaviour
 			}
 			if (mustBridge)
 			{
+				connectionStatus = ConnectionStatus.Bridge;
 				Highlight(Color.yellow);
 			} else
 			{
+				connectionStatus = ConnectionStatus.Direct;
 				Highlight(Color.green);
 			}
 		} else
 		{
+			connectionStatus = ConnectionStatus.None;
 			Highlight(Color.red);
 		}
+
+		Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+
 	}
 
 	private void OnMouseExit()
@@ -161,6 +180,20 @@ public class Node : MonoBehaviour
 		connectedNodes.Add(node);
 		node.connectedNodes.Add(this);
 		//is called when pressed on, deducts cost from gamelogic.turns
+	}
+
+	public void SetType(typeEnum t)
+	{
+		type = t;
+		switch (type)
+		{
+			case typeEnum.water:
+				sprite.sprite = waterSprite;
+				break;
+			case typeEnum.nutrients:
+				sprite.sprite = NutrientSprite;
+				break;
+		}
 	}
 
 	public void DisableHighlight()

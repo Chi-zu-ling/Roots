@@ -9,6 +9,7 @@ public class Connection : MonoBehaviour
 	public string owner = "";
 	LineRenderer line;
 	[SerializeField] LineRenderer rootRenderer;
+	[SerializeField] Transform rootTip;
 
 	public Node GetOtherNode(Node node)
 	{
@@ -38,17 +39,21 @@ public class Connection : MonoBehaviour
 
 	IEnumerator GrowRoutine(Vector3 from, Vector3 to)
 	{
-		Debug.Log("Growing");
+		rootTip.gameObject.SetActive(true);
+		//rootTip.rotation = Quaternion.Euler(new(0, 0, Vector3.Angle(from, to)));
+		rootTip.LookAt(to);
 		rootRenderer.enabled = true;
-		rootRenderer.SetPosition(0, from);
+		rootRenderer.SetPosition(1, from);
 		float growTime = 0.3f;
 		for (float t = 0; t < 0.3f; t += Time.deltaTime)
 		{
 			Vector3 end = Vector3.Lerp(from, to, t/growTime);
-			rootRenderer.SetPosition(1, end);
+			rootRenderer.SetPosition(0, end);
+			rootTip.position = end;
 			yield return null;
 		}
-		rootRenderer.SetPosition(1, to);
+		rootRenderer.SetPosition(0, to);
+		rootTip.gameObject.SetActive(false);
 		line.enabled = false;
 	}
 }
