@@ -54,6 +54,13 @@ public class Node : MonoBehaviour
 
 	private void OnMouseDown()
 	{
+
+		//Double check we don't own the node
+		if (owner == "Player")
+		{
+			return;
+		}
+
 		// double price if bridging
 		var effectiveCost = cost;
 		if (connectionStatus == ConnectionStatus.None)
@@ -94,6 +101,7 @@ public class Node : MonoBehaviour
 		}
 		connectionStatus = ConnectionStatus.None;
 		Highlight(Color.blue);
+		nearestConnectableNode.DisableHighlight();
 		connection.GrowRoot(nearestConnectableNode);
 	}
 
@@ -107,7 +115,6 @@ public class Node : MonoBehaviour
 		// Highlight all nodes in bridging radius
 		foreach(Node node in bridgableNodes)
 		{
-			node.Highlight(new(0.2f, 0.3f, 1.0f));
 			if (node.owner == "Player")
 			{
 				canConnect = true;
@@ -143,6 +150,7 @@ public class Node : MonoBehaviour
 					break;
 				}
 			}
+			nearestConnectableNode.Highlight(new(0.2f, 0.3f, 1.0f));
 			if (mustBridge)
 			{
 				connectionStatus = ConnectionStatus.Bridge;

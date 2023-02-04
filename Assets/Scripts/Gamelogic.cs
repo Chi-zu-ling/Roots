@@ -69,7 +69,7 @@ public class Gamelogic : MonoBehaviour
         var startNode = totalNodes[0];
         startNode.connectedToRoot = true;
         startNode.owner = "Player";
-        var connectedNodes = new List<Node>() { totalNodes[0] };
+        var connectedNodes = new List<Node>() { startNode};
         for(int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
 		{
             var node = connectedNodes[i];
@@ -82,6 +82,14 @@ public class Gamelogic : MonoBehaviour
                     connectedNodes.Add(cNode);
 				}
 			}
+		}
+
+        foreach(var connection in startNode.connections)
+		{
+            var node = connection.GetOtherNode(startNode);
+            connection.owner = "Player";
+            node.owner = "Player";
+            connection.GrowRoot(startNode);
 		}
     }
 
