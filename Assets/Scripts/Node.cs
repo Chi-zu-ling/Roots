@@ -54,43 +54,56 @@ public class Node : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		if (owner != "")
+		// double price if bridging
+		var effectiveCost = cost;
+		if (connectionStatus == ConnectionStatus.None)
+		{
+			return;
+		} else if (connectionStatus == ConnectionStatus.Bridge)
+		{
+			effectiveCost *= 2;
+		}
+
+		// check for sufficient funds
+		if (gamelogic.energy < effectiveCost)
 		{
 			return;
 		}
+		gamelogic.energy -= effectiveCost;
 
-		var effectiveCost = cost * 2;
-		foreach (var neighbour in connectedNodes)
+		// Connected to node
+		owner = "Player";
+
+		Connection connection = null;
+
+		if (connectedNodes.Contains(nearestConnectableNode))
 		{
-			if (neighbour.owner == "Player")
+			foreach(var c in connections)
 			{
-				effectiveCost = cost;
-				break;
-			}
-		}
-		if (gamelogic.energy >= effectiveCost)
-		{
-			foreach (var connection in connections)
-			{
-				var neighbour = connection.GetOtherNode(this);
-				if (neighbour.owner == "Player")
+				if (c.GetOtherNode(this) == nearestConnectableNode)
 				{
-					connection.owner = neighbour.owner;
-					connection.GrowRoot(neighbour);
-					owner = neighbour.owner;
-					gamelogic.energy -= effectiveCost;
-					Debug.Log(gamelogic.energy);
+					connection = c;
 					break;
 				}
 			}
+		} else
+		{
+			connection = connectTo(nearestConnectableNode);
+			connection.gameObject.name = "Fresh Connection";
+			connection.Start();
 		}
+		connectionStatus = ConnectionStatus.None;
+		Highlight(Color.blue);
+		connection.GrowRoot(nearestConnectableNode);
 	}
 
 	private void OnMouseEnter()
 	{
 		var bridgableNodes = GetNodesInRadius(MaxConnectionRadius);
 		var canConnect = false;
-		
+
+		var minDist = float.MaxValue;
+
 		// Highlight all nodes in bridging radius
 		foreach(Node node in bridgableNodes)
 		{
@@ -98,19 +111,34 @@ public class Node : MonoBehaviour
 			if (node.owner == "Player")
 			{
 				canConnect = true;
+				var distToNode = Vector3.Distance(node.transform.position, transform.position);
+				if (distToNode < minDist)
+				{
+					minDist = distToNode;
+					nearestConnectableNode = node;
+				}
 			}
 		}
+		
 
-		// Highlight the node green if can connect directly
+		// Highlight the node 
+		// Blue if already owned
+		// Green if can connect directly
 		// Yellow if can connect only through bridging
 		// Red if not at all
-		if (canConnect)
+		if (owner == "Player")
+		{
+			connectionStatus = ConnectionStatus.None;
+			Highlight(Color.blue);
+		}
+		else if (canConnect)
 		{
 			var mustBridge = true;
 			foreach (Node node in connectedNodes)
 			{
 				if (node.owner == "Player")
 				{
+					nearestConnectableNode = node;
 					mustBridge = false;
 					break;
 				}
@@ -170,7 +198,7 @@ public class Node : MonoBehaviour
 		//make connection indicators?
 	}
 
-	public void connectTo(Node node)
+	public Connection connectTo(Node node)
 	{
 		var connectionGo = Instantiate(connectionPrefab);
 		var connection = connectionGo.GetComponent<Connection>();
@@ -180,7 +208,7 @@ public class Node : MonoBehaviour
 		node.connections.Add(connection);
 		connectedNodes.Add(node);
 		node.connectedNodes.Add(this);
-		//is called when pressed on, deducts cost from gamelogic.turns
+		return connection;
 	}
 
 	public void SetType(typeEnum t)
