@@ -6,7 +6,7 @@ public class Gamelogic : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    [SerializeField] int turns;
+    [SerializeField] int energy;
 
     [SerializeField] int maxNodes;
     [SerializeField] int maxConnections;
@@ -35,13 +35,13 @@ public class Gamelogic : MonoBehaviour
         //change some of the instantiated nodes to "water" type
         //change some "basic" type nodes 
 
-        for (int mn = 0; mn < maxNodes; mn++) {
+        for (int mn = 0; mn < maxNodes-1; mn++) {
 
+            Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
+            totalNodes.Add(startNode);
 
             //get random position on playingField
             Vector2 newNodeposition = findNewNodePosition();
-
-
             Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
             totalNodes.Add(newNode);
 
@@ -52,19 +52,28 @@ public class Gamelogic : MonoBehaviour
 
     void Start()
     {
-        maxNodes = 500;
-        turns = 250;
+
+
         instantiatePlayGround();
 
-
-
-        Collider2D[] twos = (Physics2D.OverlapCircleAll (new Vector2(0, 0), (playFieldSize*0.8f)));
-        foreach (Collider2D collider in twos) {
-
+        // 3 cost area
+        foreach (Node node in totalNodes) {
+            node.cost = 3;
         }
 
-        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.5f)));
+        // 2 cost area
+        Collider2D[] twos = (Physics2D.OverlapCircleAll (new Vector2(0, 0), (playFieldSize*0.8f)));
+        foreach (var hit in twos) {
+            Node node = hit.transform.parent.GetComponent<Node>();
+            node.cost = 2;
+        }
 
+        //one cost area
+        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.5f)));
+        foreach (var hit in ones){
+            Node node = hit.transform.parent.GetComponent<Node>();
+            node.cost = 1;
+        }
 
     }
 
@@ -89,7 +98,6 @@ public class Gamelogic : MonoBehaviour
         {
             if (hits[i].name == "Sprite")
             {
-                Debug.Log(hits[i].name);
                 return true;
             }
         }
