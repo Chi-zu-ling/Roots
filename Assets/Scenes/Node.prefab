@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6885795390159970467}
   - component: {fileID: 3862784381947640080}
+  - component: {fileID: 2963898904991926636}
   m_Layer: 0
   m_Name: Node
   m_TagString: Untagged
@@ -49,9 +50,28 @@ MonoBehaviour:
   connectionPrefab: {fileID: 7526681154194625534, guid: 8c897e06690aab64c8dd8539065a836a, type: 3}
   connectedNodes: []
   connections: []
+  connectedToRoot: 0
   cost: 0
   owner: 
+  type: 0
+  modifier: 0
   Connections: {fileID: 0}
+--- !u!58 &2963898904991926636
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3218799220250070857}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &5639467359977805653
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,7 +82,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1781392529666949972}
   - component: {fileID: 2093705298610401451}
-  - component: {fileID: 7060310450120295723}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -137,19 +156,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &7060310450120295723
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5639467359977805653}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5

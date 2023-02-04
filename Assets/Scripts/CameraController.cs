@@ -34,7 +34,6 @@ public class CameraController : MonoBehaviour
 
     public void OnCameraZoom(InputAction.CallbackContext context)
     {
-        Debug.Log(context.ReadValue<Vector2>().y);
         float MoveDirection = context.ReadValue<Vector2>().y;
         if (playerCam.orthographicSize >= minZoom)
         {

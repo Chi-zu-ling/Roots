@@ -9,7 +9,7 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public int energy;
 
     [SerializeField] int maxNodes;
-    [SerializeField] int maxConnections;
+    [SerializeField] public int maxConnections;
 
     [SerializeField] float playFieldSize;
     [SerializeField] float deadZone;
@@ -59,6 +59,7 @@ public class Gamelogic : MonoBehaviour
 
         var startNode = totalNodes[0];
         startNode.connectedToRoot = true;
+        startNode.owner = "Player";
         var connectedNodes = new List<Node>() { totalNodes[0] };
         for(int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
 		{
@@ -73,7 +74,6 @@ public class Gamelogic : MonoBehaviour
 				}
 			}
 		}
-
     }
 
 
@@ -114,7 +114,7 @@ public class Gamelogic : MonoBehaviour
         Collider2D[] twos = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.9f)));
         foreach (var hit in twos)
         {
-            Node node = hit.transform.parent.GetComponent<Node>();
+            Node node = hit.GetComponent<Node>();
             node.cost = 2;
         }
 
@@ -122,7 +122,7 @@ public class Gamelogic : MonoBehaviour
         Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.7f)));
         foreach (var hit in ones)
         {
-            Node node = hit.transform.parent.GetComponent<Node>();
+            Node node = hit.GetComponent<Node>();
             node.cost = 1;
         }
 
@@ -147,7 +147,6 @@ public class Gamelogic : MonoBehaviour
         {
             int r = Random.Range(0, totalNodes.Count);
             totalNodes[r].type = Node.typeEnum.water;
-            Debug.Log(totalNodes[r].gameObject.transform.Find("Sprite").GetComponent<SpriteRenderer>().color);
             totalNodes[r].gameObject.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = new Color32(100,120, 255, 255);
         }
 

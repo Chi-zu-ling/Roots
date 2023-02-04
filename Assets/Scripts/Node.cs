@@ -43,11 +43,22 @@ public class Node : MonoBehaviour
 
 	private void OnMouseDown()
 	{
+        Debug.Log("HELP");
         if (owner != "")
 		{
             return;
 		}
-        if (gamelogic.energy >= cost)
+
+        var effectiveCost = cost * 2;
+        foreach(var neighbour in connectedNodes)
+		{
+            if(neighbour.owner == "Player")
+			{
+                effectiveCost = cost;
+                break;
+			}
+		}
+        if (gamelogic.energy >= effectiveCost)
 		{
             foreach(var connection in connections)
 			{
@@ -56,7 +67,9 @@ public class Node : MonoBehaviour
 				{
                     connection.owner = neighbour.owner;
                     owner = neighbour.owner;
-                    gamelogic.energy -= cost;
+                    gamelogic.energy -= effectiveCost;
+                    Debug.Log(gamelogic.energy);
+                    break;
 				}
 			}
 		}
@@ -70,12 +83,12 @@ public class Node : MonoBehaviour
             Collider2D[] hits = (Physics2D.OverlapCircleAll(this.transform.position, connectionRadius));
             foreach (var hit in hits)
             {
-                Node node = hit.GetComponentInParent<Node>();
+                Node node = hit.GetComponent<Node>();
                 if (node != null && node != this && !connectedNodes.Contains(node) && !node.connectedToRoot)
                 {
                     connectTo(node);
                     newConnections += 1;
-                }
+				}
             }
             connectionRadius += 1;
         }
@@ -92,9 +105,11 @@ public class Node : MonoBehaviour
         connection.node1 = this;
         connection.node2 = node;
         connections.Add(connection);
-        connectedNodes.Add(node);
-        //is called when pressed on, deducts cost from gamelogic.turns
-    }
+		node.connections.Add(connection);
+		connectedNodes.Add(node);
+		node.connectedNodes.Add(this);
+		//is called when pressed on, deducts cost from gamelogic.turns
+	}
 
 
 
