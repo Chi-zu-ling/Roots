@@ -259,6 +259,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
+      propertyPath: deadZone
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
+      propertyPath: playFieldSize
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7316349080243241284, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: m_Name
       value: gamelogic

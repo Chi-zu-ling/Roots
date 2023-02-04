@@ -10,14 +10,18 @@ public class Gamelogic : MonoBehaviour
 
     [SerializeField] int maxNodes;
     [SerializeField] int maxConnections;
+
+    [SerializeField] float playFieldSize;
     [SerializeField] float deadZone;
+    [SerializeField] float twoArea;
+    [SerializeField] float oneArea;
     
     [SerializeField] int waterNodes;
 
     [SerializeField] int turnNodes;
     [SerializeField] int multNodes;
 
-    List<Node> totalNodes;
+    List<Node> totalNodes = new List<Node>();
 
     public Node node;
 
@@ -45,6 +49,7 @@ public class Gamelogic : MonoBehaviour
 
     }
 
+
     void Start()
     {
         maxNodes = 500;
@@ -52,16 +57,26 @@ public class Gamelogic : MonoBehaviour
         instantiatePlayGround();
 
 
-        // Collider2D[] hits = (Physics2D.OverlapCircleAll(newPosition, deadZone));
+
+        Collider2D[] twos = (Physics2D.OverlapCircleAll (new Vector2(0, 0), (playFieldSize*0.8f)));
+        foreach (Collider2D collider in twos) {
+
+        }
+
+        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.5f)));
+
+
     }
 
 
     Vector2 findNewNodePosition() {
-        Vector2 newPosition = Random.insideUnitCircle * 100;
+        Vector2 newPosition = Random.insideUnitCircle * playFieldSize;
+
         while (checkOverlap(newPosition))
         {
-            newPosition = Random.insideUnitCircle * 100;
+            newPosition = Random.insideUnitCircle * playFieldSize;
         }
+
         return newPosition;
     }
 
