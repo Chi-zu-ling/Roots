@@ -46,7 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gamelogic: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
+  connectionPrefab: {fileID: 7526681154194625534, guid: 8c897e06690aab64c8dd8539065a836a, type: 3}
   connectedNodes: []
+  connections: []
+  cost: 0
+  owner: 
   Connections: {fileID: 0}
 --- !u!1 &5639467359977805653
 GameObject:

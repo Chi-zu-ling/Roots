@@ -6,7 +6,7 @@ public class Gamelogic : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    [SerializeField] int energy;
+    [SerializeField] public int energy;
 
     [SerializeField] int maxNodes;
     [SerializeField] int maxConnections;
@@ -35,10 +35,11 @@ public class Gamelogic : MonoBehaviour
         //change some of the instantiated nodes to "water" type
         //change some "basic" type nodes 
 
-        for (int mn = 0; mn < maxNodes-1; mn++) {
 
-            Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
-            totalNodes.Add(startNode);
+        Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
+        totalNodes.Add(startNode);
+
+        for (int mn = 0; mn < maxNodes-1; mn++) {
 
             //get random position on playingField
             Vector2 newNodeposition = findNewNodePosition();
@@ -74,6 +75,23 @@ public class Gamelogic : MonoBehaviour
             Node node = hit.transform.parent.GetComponent<Node>();
             node.cost = 1;
         }
+
+        var startNode = totalNodes[0];
+        startNode.connectedToRoot = true;
+        var connectedNodes = new List<Node>() { totalNodes[0] };
+        for(int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
+		{
+            var node = connectedNodes[i];
+            node.MakeConnections();
+            foreach(var cNode in node.connectedNodes)
+			{
+                if (!cNode.connectedToRoot)
+				{
+                    cNode.connectedToRoot = true;
+                    connectedNodes.Add(cNode);
+				}
+			}
+		}
 
     }
 

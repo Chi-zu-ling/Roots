@@ -6,7 +6,7 @@ public class Connection : MonoBehaviour
 {
 	public Node node1;
 	public Node node2;
-
+	public string owner = "";
 	LineRenderer line;
 
 	public Node GetOtherNode(Node node)
