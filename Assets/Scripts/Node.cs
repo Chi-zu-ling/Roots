@@ -10,10 +10,13 @@ public class Node : MonoBehaviour
     [SerializeField] GameObject connectionPrefab;
     public List<Node> connectedNodes = new();
     public List<Connection> connections = new();
+    public bool connectedToRoot = false;
     Vector2 position;
     public int cost;
     float connectionRadius = 6;
-    float maxConnections = 10;
+    float MaxConnectionRadius = 10;
+
+    public string owner = "";
 
     public typeEnum type;
     public modifierEnum modifier;
@@ -35,25 +38,47 @@ public class Node : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //MakeConnections();
     }
 
 	private void OnMouseDown()
 	{
-        
-	}
-
-	public void checkForConnections() {
-
-        Collider2D[] hits = (Physics2D.OverlapCircleAll(this.transform.position, connectionRadius));
-        foreach(var hit in hits)
+        if (owner != "")
 		{
-            Node node = hit.GetComponent<Node>();
-            if (node != null || connectedNodes.Contains(node))
+            return;
+		}
+        if (gamelogic.energy >= cost)
+		{
+            foreach(var connection in connections)
 			{
-                connectTo(node);
+                var neighbour = connection.GetOtherNode(this);
+                if (neighbour.owner == "Player")
+				{
+                    connection.owner = neighbour.owner;
+                    owner = neighbour.owner;
+                    gamelogic.energy -= cost;
+				}
 			}
 		}
+	}
+
+	public void MakeConnections() {
+
+        int newConnections = 0;
+        while (newConnections == 0 && connectionRadius < MaxConnectionRadius)
+        {
+            Collider2D[] hits = (Physics2D.OverlapCircleAll(this.transform.position, connectionRadius));
+            foreach (var hit in hits)
+            {
+                Node node = hit.GetComponentInParent<Node>();
+                if (node != null && node != this && !connectedNodes.Contains(node) && !node.connectedToRoot)
+                {
+                    connectTo(node);
+                    newConnections += 1;
+                }
+            }
+            connectionRadius += 1;
+        }
         //check for a radius around node
         //get all nodes available ("possibleConnections")
         //get random value between 1 and "maxConnections"
@@ -67,6 +92,7 @@ public class Node : MonoBehaviour
         connection.node1 = this;
         connection.node2 = node;
         connections.Add(connection);
+        connectedNodes.Add(node);
         //is called when pressed on, deducts cost from gamelogic.turns
     }
 
