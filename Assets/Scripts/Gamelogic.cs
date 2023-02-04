@@ -29,7 +29,37 @@ public class Gamelogic : MonoBehaviour
 
     public Node node;
 
-    void Start()
+    public void instantiatePlayGround() {
+
+        //change some of the instantiated nodes to "water" type
+        //change some "basic" type nodes 
+
+
+        Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
+        totalNodes.Add(startNode);
+
+        for (int mn = 0; mn < maxNodes-1; mn++) {
+
+            //get random position on playingField
+            Vector2 newNodeposition = findNewNodePosition();
+            Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
+            totalNodes.Add(newNode);
+        }
+
+        foreach(Node node in totalNodes)
+		{
+            node.gamelogic = this;
+		}
+
+    }
+
+	private void Awake()
+	{
+        Debug.Log(energy);
+	}
+
+
+	void Start()
     {
         instantiatePlayGround();
         createCostAreas();
@@ -94,9 +124,12 @@ public class Gamelogic : MonoBehaviour
 
         //check position for any other nodes
         Collider2D[] hits = (Physics2D.OverlapCircleAll(newPosition, deadZone));
-
-        if (hits.Length > 0) {
-            return true;
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i].GetComponent<Node>() != null)
+            {
+                return true;
+            }
         }
         return false;
        
@@ -148,7 +181,7 @@ public class Gamelogic : MonoBehaviour
         {
             int r = Random.Range(0, totalNodes.Count);
             totalNodes[r].type = Node.typeEnum.water;
-            totalNodes[r].gameObject.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = new Color32(100,120, 255, 255);
+            totalNodes[r].SetType(Node.typeEnum.water);
         }
 
     }

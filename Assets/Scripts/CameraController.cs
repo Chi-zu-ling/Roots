@@ -10,11 +10,13 @@ public class CameraController : MonoBehaviour
     public float minZoom = -20;
     private Camera playerCam;
     private Vector3 recenterCoords;
+    private float defaultZoom;
     // Start is called before the first frame update
     void Start()
     {
         playerCam = GetComponent<Camera>();
         recenterCoords = playerCam.transform.position;
+        defaultZoom = playerCam.orthographicSize;
     }
 
     // Update is called once per frame
@@ -54,8 +56,9 @@ public class CameraController : MonoBehaviour
         OnRecenterCamera();
     }
 
-    void OnRecenterCamera()
+    public void OnRecenterCamera()
     {
         playerCam.transform.position = recenterCoords;
+        playerCam.orthographicSize = defaultZoom;
     }
 }
