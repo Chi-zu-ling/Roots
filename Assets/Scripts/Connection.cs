@@ -8,6 +8,7 @@ public class Connection : MonoBehaviour
 	public Node node2;
 	public string owner = "";
 	LineRenderer line;
+	[SerializeField] LineRenderer rootRenderer;
 
 	public Node GetOtherNode(Node node)
 	{
@@ -23,8 +24,31 @@ public class Connection : MonoBehaviour
 	private void Start()
 	{
 		line = GetComponent<LineRenderer>();
-		transform.position = 0.5f * (node1.transform.position + node2.transform.position);
-		line.SetPosition(0, node1.transform.position);
-		line.SetPosition(1, node2.transform.position);
+		rootRenderer.enabled = false;
+		Vector3 offset = new Vector3(0, 0, 0.1f);
+		line.SetPosition(0, node1.transform.position + offset);
+		line.SetPosition(1, node2.transform.position + offset);
+	}
+
+	public void GrowRoot(Node from)
+	{
+		Node to = GetOtherNode(from);
+		StartCoroutine(GrowRoutine(from.transform.position, to.transform.position));
+	}
+
+	IEnumerator GrowRoutine(Vector3 from, Vector3 to)
+	{
+		Debug.Log("Growing");
+		rootRenderer.enabled = true;
+		rootRenderer.SetPosition(0, from);
+		float growTime = 0.3f;
+		for (float t = 0; t < 0.3f; t += Time.deltaTime)
+		{
+			Vector3 end = Vector3.Lerp(from, to, t/growTime);
+			rootRenderer.SetPosition(1, end);
+			yield return null;
+		}
+		rootRenderer.SetPosition(1, to);
+		line.enabled = false;
 	}
 }

@@ -44,13 +44,22 @@ public class Gamelogic : MonoBehaviour
             Vector2 newNodeposition = findNewNodePosition();
             Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
             totalNodes.Add(newNode);
-
         }
+
+        foreach(Node node in totalNodes)
+		{
+            node.gamelogic = this;
+		}
 
     }
 
+	private void Awake()
+	{
+        Debug.Log(energy);
+	}
 
-    void Start()
+
+	void Start()
     {
         instantiatePlayGround();
         createCostAreas();
