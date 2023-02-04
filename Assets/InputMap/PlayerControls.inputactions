@@ -24,15 +24,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pause",
-                    "type": "Button",
-                    "id": "16373cbe-290e-49e0-bad2-49cae403bab0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Restart",
                     "type": "Button",
                     "id": "2157bb42-d4f9-44dd-8781-f489e4312065",
@@ -102,28 +93,6 @@
                     "processors": "ScaleVector2(y=0.085)",
                     "groups": "Keyboard & Mouse",
                     "action": "Camera Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3d10b567-c36b-4b84-9586-23f7fad013c7",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "130ef692-33c1-4fd6-ba07-97bc26146d76",
-                    "path": "<Keyboard>/p",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
