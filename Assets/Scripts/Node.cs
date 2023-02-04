@@ -15,15 +15,18 @@ public class Node : MonoBehaviour
     float connectionRadius = 6;
     float maxConnections = 10;
 
+    public typeEnum type;
+    public modifierEnum modifier;
+
     public CircleCollider2D Connections;
 
-    enum type { 
+    public enum typeEnum { 
         basic,
         water,
         nutrients
     }
 
-    enum modifier { 
+    public enum modifierEnum { 
         basic,
         turn,
         multi
