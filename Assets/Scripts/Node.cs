@@ -8,7 +8,7 @@ public class Node : MonoBehaviour
     [SerializeField] Gamelogic gamelogic;
     public List<Node> connectedNodes;
     Vector2 position;
-    int cost;
+    public int cost;
 
     public CircleCollider2D Connections;
 
