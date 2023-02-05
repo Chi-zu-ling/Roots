@@ -16,7 +16,13 @@ public class Popup : MonoBehaviour
 
 	public void DisplayNodeInfo(Node node)
 	{
+		if (node.owner == "Player")
+		{
+			Hide();
+			return;
+		}
 		var cost = node.cost;
+		var waterCost = 1;
 		if (node.connectionStatus == Node.ConnectionStatus.Bridge)
 		{
 			cost *= 2;
@@ -25,7 +31,11 @@ public class Popup : MonoBehaviour
 		{
 			cost -= 3;
 		}
-		label.text = $"{-cost} Energy";
+		if (node.modifier == Node.modifierEnum.water)
+		{
+			waterCost -= 3;
+		}
+		label.text = $"{-cost} Energy\n{-waterCost} Water";
 	}
 
 	public void Hide()
