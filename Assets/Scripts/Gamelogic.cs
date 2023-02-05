@@ -7,6 +7,8 @@ public class Gamelogic : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField] public int energy;
+    [SerializeField] public int water;
+    [SerializeField] public int maxWater;
 
     [SerializeField] int maxNodes;
     [SerializeField] public int maxConnections;
@@ -238,7 +240,24 @@ public class Gamelogic : MonoBehaviour
 
             case (Node.modifierEnum.water):
                 Debug.Log("water");
+                adjustWater(3);
                 break;
         }
+    }
+
+    public void adjustWater(int amount) {
+
+        water += amount;
+
+        if (water > maxWater){
+            water = maxWater;}
+
+        else if (water < 0){
+            water = 0;
+        // you died by lack of water
+        }
+
+        //set water UI 
+
     }
 }

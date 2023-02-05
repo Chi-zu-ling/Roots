@@ -1684,10 +1684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76681bd9777705c409f15796634fdf8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
-  energyGain: 0
-  waterGain: 0
-  label: {fileID: 321791099}
+  label: {fileID: 0}
 --- !u!1 &1455212184
 GameObject:
   m_ObjectHideFlags: 0
@@ -2121,6 +2118,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
+      propertyPath: water
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: energy
       value: 250
       objectReference: {fileID: 0}
@@ -2131,6 +2132,10 @@ PrefabInstance:
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: maxNodes
       value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
+      propertyPath: maxWater
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: multNodes

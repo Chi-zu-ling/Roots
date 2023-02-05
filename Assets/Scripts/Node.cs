@@ -69,7 +69,11 @@ public class Node : MonoBehaviour
 		{
 			return;
 		}
+
+		gamelogic.doNodeModifiers(this);
+		gamelogic.adjustWater(-1);
 		gamelogic.energy -= effectiveCost;
+
 
 		// Connected to node
 		owner = "Player";
