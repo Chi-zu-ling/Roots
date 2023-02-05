@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camSpeed: -0.013
-  zoomSpeed: -1
+  zoomSpeed: -0.3
   minZoom: 10
 --- !u!114 &519420034
 MonoBehaviour:
