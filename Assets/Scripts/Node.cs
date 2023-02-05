@@ -166,7 +166,8 @@ public class Node : MonoBehaviour
 			Highlight(Color.red);
 		}
 		Popup.instance.gameObject.SetActive(true);
-		Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+		Popup.instance.DisplayNodeInfo(this);
+		//Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
 
 	}
 

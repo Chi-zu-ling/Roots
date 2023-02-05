@@ -128,7 +128,7 @@ public class Gamelogic : MonoBehaviour
         }
 
         // 2 cost area
-        Collider2D[] twos = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.9f)));
+        Collider2D[] twos = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.6f)));
         foreach (var hit in twos)
         {
             Node node = hit.GetComponent<Node>();
@@ -136,7 +136,7 @@ public class Gamelogic : MonoBehaviour
         }
 
         //one cost area
-        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.7f)));
+        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.3f)));
         foreach (var hit in ones)
         {
             Node node = hit.GetComponent<Node>();
