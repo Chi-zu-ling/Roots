@@ -30,14 +30,14 @@ public class Node : MonoBehaviour
 		water
 	}
 
-	enum ConnectionStatus
+	public enum ConnectionStatus
 	{
 		Direct,
 		Bridge,
 		None,
 	}
 
-	ConnectionStatus connectionStatus = ConnectionStatus.None;
+	public ConnectionStatus connectionStatus = ConnectionStatus.None;
 	Node nearestConnectableNode;
 
 	// Start is called before the first frame update
