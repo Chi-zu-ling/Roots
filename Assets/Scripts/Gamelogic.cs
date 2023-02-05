@@ -38,7 +38,12 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public TMP_Text scoreText;
     [SerializeField] public Image waterLevelUI;
     [SerializeField] public TMP_Text waterLabel;
-    
+
+    [SerializeField] CameraController camCon;
+
+    [SerializeField] public GameObject GameOverPanel;
+    [SerializeField] public TMP_Text GOscoreText;
+    [SerializeField] public TMP_Text GODescriptionText;
 
     public void instantiatePlayGround() {
 
@@ -271,14 +276,24 @@ public class Gamelogic : MonoBehaviour
         if (water > maxWater){
             water = maxWater;}
 
-        else if (water < 0){
+        else if (water <= 0){
             water = 0;
-        // you died by lack of water
+            GODescriptionText.text = "You wilted by lack of Water";
+            GameoVer();
         }
 
         //Debug.Log("W: " + water);
 
         UpdateUI();
+
+    }
+
+    public void GameoVer() {
+
+        camCon.OnRecenterCamera();
+        GOscoreText.text = $"Score: {score}";
+        UpdateUI();
+        GameOverPanel.SetActive(true);
 
     }
 }

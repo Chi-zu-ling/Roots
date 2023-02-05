@@ -67,6 +67,7 @@ public class Node : MonoBehaviour
 		// check for sufficient funds
 		if (gamelogic.energy < effectiveCost)
 		{
+			gamelogic.energy = 0;
 			return;
 		}
 
@@ -76,6 +77,11 @@ public class Node : MonoBehaviour
 
 		gamelogic.doNodeModifiers(this);
 		gamelogic.energy -= effectiveCost;
+		if (gamelogic.energy <= 0)
+		{
+			gamelogic.GODescriptionText.text = "No more energy to extend roots";
+			gamelogic.GameoVer();
+		}
 		gamelogic.UpdateUI();
 
 		// Connected to node
