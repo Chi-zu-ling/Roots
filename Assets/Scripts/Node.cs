@@ -67,6 +67,11 @@ public class Node : MonoBehaviour
 		// check for sufficient funds
 		if (gamelogic.energy < effectiveCost)
 		{
+			gamelogic.energy = 0;
+			gamelogic.GODescriptionUI.text = "You have no more energy to grow your Roots";
+			gamelogic.UpdateUI();
+			gamelogic.GameOver();
+			//game over
 			return;
 		}
 

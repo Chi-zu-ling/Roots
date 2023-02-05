@@ -37,6 +37,12 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public TMP_Text energyText;
     [SerializeField] public TMP_Text scoreText;
     [SerializeField] public Image waterLevelUI;
+
+    [SerializeField] public GameObject gameOverPanel;
+    [SerializeField] public TMP_Text GOScoreUI;
+    [SerializeField] public TMP_Text GODescriptionUI;
+
+    [SerializeField] CameraController camCon;
     
 
     public void instantiatePlayGround() {
@@ -271,7 +277,8 @@ public class Gamelogic : MonoBehaviour
 
         else if (water < 0){
             water = 0;
-        // you died by lack of water
+            GODescriptionUI.text = "Your tree wilted by the lack of water";
+            GameOver();
         }
 
         //Debug.Log("W: " + water);
@@ -279,4 +286,16 @@ public class Gamelogic : MonoBehaviour
         UpdateUI();
 
     }
+
+
+    public void GameOver() {
+
+        camCon.OnRecenterCamera();
+        gameOverPanel.SetActive(true);
+        GOScoreUI.text = $"Score: {score}";
+        
+
+    }
+
+
 }
