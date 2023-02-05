@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Gamelogic : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public int energy;
     [SerializeField] public int water;
     [SerializeField] public int maxWater;
+    [SerializeField] public int score = 0;
+    [SerializeField] public float currentWaterLevel;
+    [SerializeField] public float waterDrainRate = 0;
 
     [SerializeField] int maxNodes;
     [SerializeField] public int maxConnections;
@@ -30,8 +35,12 @@ public class Gamelogic : MonoBehaviour
 
     public Node node;
 
-    public void instantiatePlayGround()
-    {
+    [SerializeField] public TMP_Text energyText;
+    [SerializeField] public TMP_Text scoreText;
+    [SerializeField] public Image waterLevelUI;
+    
+
+    public void instantiatePlayGround() {
 
         //change some of the instantiated nodes to "water" type
         //change some "basic" type nodes 
@@ -86,6 +95,8 @@ public class Gamelogic : MonoBehaviour
 			}
 		}
 
+        UpdateUI();
+        waterDrainRate = 0.1f;
         foreach(var connection in startNode.connections)
 		{
             var node = connection.GetOtherNode(startNode);
@@ -216,6 +227,14 @@ public class Gamelogic : MonoBehaviour
         int r = Random.Range(0, nodeList.Count);
         Node returnNode = nodeList[r];
         return returnNode;
+    }
+
+    public void UpdateUI()
+    {
+        energyText.text = energy.ToString();
+        scoreText.text = score.ToString();
+        currentWaterLevel -= waterDrainRate;
+        waterLevelUI.fillAmount = currentWaterLevel; 
     }
 
 
