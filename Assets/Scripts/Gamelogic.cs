@@ -27,7 +27,7 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] int nutriNodes;
 
     List<Node> totalNodes = new List<Node>();
-
+    public bool gameOver = false;
     public List<Node> threesList = new();
     public List<Node> twosList = new();
     public List<Node> onesList = new();
@@ -38,6 +38,10 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public TMP_Text scoreText;
     [SerializeField] public Image waterLevelUI;
     [SerializeField] public TMP_Text waterLabel;
+
+    [SerializeField] AudioSource energySound;
+    [SerializeField] AudioSource waterSound;
+
 
     [SerializeField] CameraController camCon;
 
@@ -258,6 +262,7 @@ public class Gamelogic : MonoBehaviour
 
             case (Node.modifierEnum.nutri):
                 energy += 5;
+                energySound.Play();
                 Debug.Log("+ 5");
                 UpdateUI();
                 break;
@@ -265,6 +270,7 @@ public class Gamelogic : MonoBehaviour
 
             case (Node.modifierEnum.water):
                 adjustWater(3);
+                waterSound.Play();
                 break;
         }
     }
@@ -294,6 +300,6 @@ public class Gamelogic : MonoBehaviour
         GOscoreText.text = $"Score: {score}";
         UpdateUI();
         GameOverPanel.SetActive(true);
-
+        gameOver = true;
     }
 }

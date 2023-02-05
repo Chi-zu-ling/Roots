@@ -47,6 +47,8 @@ public class Node : MonoBehaviour
 
 	private void OnMouseDown()
 	{
+		if (gamelogic.gameOver) return;
+
 
 		//Double check we don't own the node
 		if (owner == "Player")
@@ -68,7 +70,6 @@ public class Node : MonoBehaviour
 		if (gamelogic.energy < effectiveCost)
 		{
 			gamelogic.energy = 0;
-			return;
 		}
 
 
@@ -79,6 +80,7 @@ public class Node : MonoBehaviour
 		gamelogic.energy -= effectiveCost;
 		if (gamelogic.energy <= 0)
 		{
+			gamelogic.energy = 0;
 			gamelogic.GODescriptionText.text = "No more energy to extend roots";
 			gamelogic.GameoVer();
 		}

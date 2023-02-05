@@ -10,6 +10,7 @@ public class Connection : MonoBehaviour
 	LineRenderer line;
 	[SerializeField] LineRenderer rootRenderer;
 	[SerializeField] Transform rootTip;
+	[SerializeField] AudioSource growSound;
 
 	public Node GetOtherNode(Node node)
 	{
@@ -39,6 +40,7 @@ public class Connection : MonoBehaviour
 	{
 		Node to = GetOtherNode(from);
 		StartCoroutine(GrowRoutine(from.transform.position, to.transform.position));
+		growSound.Play();
 	}
 
 	IEnumerator GrowRoutine(Vector3 from, Vector3 to)
