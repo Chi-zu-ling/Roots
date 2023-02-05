@@ -84,7 +84,10 @@ public class Node : MonoBehaviour
 				if (c.GetOtherNode(this) == nearestConnectableNode)
 				{
 					connection = c;
-					gamelogic.score += (int)typeEnum.nutrients;
+					if (modifier == modifierEnum.nutri)
+                    {
+						gamelogic.energy += 3;
+					}
 					gamelogic.UpdateUI();
 					break;
 				}
