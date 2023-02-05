@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Node : MonoBehaviour
 {
@@ -79,6 +80,8 @@ public class Node : MonoBehaviour
 					connection.GrowRoot(neighbour);
 					owner = neighbour.owner;
 					gamelogic.energy -= effectiveCost;
+					gamelogic.score += (int)typeEnum.nutrients;
+					gamelogic.UpdateUI();
 					Debug.Log(gamelogic.energy);
 					break;
 				}
