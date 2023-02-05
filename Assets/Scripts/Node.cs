@@ -74,6 +74,7 @@ public class Node : MonoBehaviour
 		gamelogic.doNodeModifiers(this);
 		gamelogic.adjustWater(-1);
 		gamelogic.energy -= effectiveCost;
+		gamelogic.score += 1;
 
 
 		// Connected to node
@@ -92,7 +93,6 @@ public class Node : MonoBehaviour
                     {
 						gamelogic.energy += 3;
 					}
-					gamelogic.UpdateUI();
 					break;
 				}
 			}
@@ -102,6 +102,8 @@ public class Node : MonoBehaviour
 			connection.gameObject.name = "Fresh Connection";
 			connection.Start();
 		}
+
+		gamelogic.UpdateUI();
 		connectionStatus = ConnectionStatus.None;
 		Highlight(Color.blue);
 		nearestConnectableNode.DisableHighlight();

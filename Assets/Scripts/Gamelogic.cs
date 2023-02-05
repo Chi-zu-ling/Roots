@@ -232,7 +232,7 @@ public class Gamelogic : MonoBehaviour
     public void UpdateUI()
     {
         energyText.text = energy.ToString();
-        scoreText.text = score.ToString();
+        scoreText.text = $"Score: {score}";
         currentWaterLevel -= waterDrainRate;
         waterLevelUI.fillAmount = currentWaterLevel; 
     }
