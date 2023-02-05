@@ -22,10 +22,14 @@ public class Connection : MonoBehaviour
 		}
 	}
 
-	private void Start()
+	public void Awake()
+	{
+		rootRenderer.enabled = false;
+	}
+
+	public void Start()
 	{
 		line = GetComponent<LineRenderer>();
-		rootRenderer.enabled = false;
 		Vector3 offset = new Vector3(0, 0, 0.1f);
 		line.SetPosition(0, node1.transform.position + offset);
 		line.SetPosition(1, node2.transform.position + offset);
@@ -40,7 +44,6 @@ public class Connection : MonoBehaviour
 	IEnumerator GrowRoutine(Vector3 from, Vector3 to)
 	{
 		rootTip.gameObject.SetActive(true);
-		//rootTip.rotation = Quaternion.Euler(new(0, 0, Vector3.Angle(from, to)));
 		rootTip.LookAt(to);
 		rootRenderer.enabled = true;
 		rootRenderer.SetPosition(1, from);

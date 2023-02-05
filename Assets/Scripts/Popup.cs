@@ -6,12 +6,16 @@ public class Popup : MonoBehaviour
 {
 
 	public static Popup instance;
-	public int cost;
-	public int energyGain;
-	public int waterGain;
+
+	[SerializeField] TMPro.TMP_Text label;
 
 	private void Awake()
 	{
 		instance = this;
+	}
+
+	public void DisplayNodeInfo(Node node)
+	{
+		label.text = $"-{node.cost} Energy";
 	}
 }

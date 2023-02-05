@@ -20,21 +20,14 @@ public class Node : MonoBehaviour
 
 	public string owner = "";
 
-	public typeEnum type;
-	public modifierEnum modifier;
 
-	public enum typeEnum
-	{
-		basic,
-		water,
-		nutrients
-	}
+	public modifierEnum modifier;
 
 	public enum modifierEnum
 	{
 		basic,
-		turn,
-		multi
+		nutri,
+		water
 	}
 
 	enum ConnectionStatus
@@ -55,69 +48,105 @@ public class Node : MonoBehaviour
 
 	private void OnMouseDown()
 	{
-		if (owner != "")
+
+		//Double check we don't own the node
+		if (owner == "Player")
 		{
 			return;
 		}
 
-		var effectiveCost = cost * 2;
-		foreach (var neighbour in connectedNodes)
+		// double price if bridging
+		var effectiveCost = cost;
+		if (connectionStatus == ConnectionStatus.None)
 		{
-			if (neighbour.owner == "Player")
-			{
-				effectiveCost = cost;
-				break;
-			}
+			return;
+		} else if (connectionStatus == ConnectionStatus.Bridge)
+		{
+			effectiveCost *= 2;
 		}
-		if (gamelogic.energy >= effectiveCost)
+
+		// check for sufficient funds
+		if (gamelogic.energy < effectiveCost)
 		{
-			foreach (var connection in connections)
+			return;
+		}
+		gamelogic.energy -= effectiveCost;
+
+		// Connected to node
+		owner = "Player";
+
+		Connection connection = null;
+
+		if (connectedNodes.Contains(nearestConnectableNode))
+		{
+			foreach(var c in connections)
 			{
-				var neighbour = connection.GetOtherNode(this);
-				if (neighbour.owner == "Player")
+				if (c.GetOtherNode(this) == nearestConnectableNode)
 				{
-					connection.owner = neighbour.owner;
-					connection.GrowRoot(neighbour);
-					owner = neighbour.owner;
-					gamelogic.energy -= effectiveCost;
+					connection = c;
 					gamelogic.score += (int)typeEnum.nutrients;
 					gamelogic.UpdateUI();
-					Debug.Log(gamelogic.energy);
 					break;
 				}
 			}
+		} else
+		{
+			connection = connectTo(nearestConnectableNode);
+			connection.gameObject.name = "Fresh Connection";
+			connection.Start();
 		}
+		connectionStatus = ConnectionStatus.None;
+		Highlight(Color.blue);
+		nearestConnectableNode.DisableHighlight();
+		connection.GrowRoot(nearestConnectableNode);
 	}
 
 	private void OnMouseEnter()
 	{
-		Highlight(Color.green);
 		var bridgableNodes = GetNodesInRadius(MaxConnectionRadius);
 		var canConnect = false;
-		
+
+		var minDist = float.MaxValue;
+
 		// Highlight all nodes in bridging radius
 		foreach(Node node in bridgableNodes)
 		{
-			node.Highlight(new(0.2f, 0.3f, 1.0f));
 			if (node.owner == "Player")
 			{
 				canConnect = true;
+				var distToNode = Vector3.Distance(node.transform.position, transform.position);
+				if (distToNode < minDist)
+				{
+					minDist = distToNode;
+					nearestConnectableNode = node;
+				}
 			}
 		}
+		
 
-		// Highlight the node green if can connect directly
+		// Highlight the node 
+		// Blue if already owned
+		// Green if can connect directly
 		// Yellow if can connect only through bridging
 		// Red if not at all
-		if (canConnect)
+		if (owner == "Player")
 		{
-			var mustBridge = false;
+			connectionStatus = ConnectionStatus.None;
+			Highlight(Color.blue);
+		}
+		else if (canConnect)
+		{
+			var mustBridge = true;
 			foreach (Node node in connectedNodes)
 			{
 				if (node.owner == "Player")
 				{
+					nearestConnectableNode = node;
 					mustBridge = false;
+					break;
 				}
 			}
+			nearestConnectableNode.Highlight(new(0.2f, 0.3f, 1.0f));
 			if (mustBridge)
 			{
 				connectionStatus = ConnectionStatus.Bridge;
@@ -133,7 +162,8 @@ public class Node : MonoBehaviour
 			Highlight(Color.red);
 		}
 		Popup.instance.gameObject.SetActive(true);
-		Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+		Popup.instance.DisplayNodeInfo(this);
+		//Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
 
 	}
 
@@ -173,7 +203,7 @@ public class Node : MonoBehaviour
 		//make connection indicators?
 	}
 
-	public void connectTo(Node node)
+	public Connection connectTo(Node node)
 	{
 		var connectionGo = Instantiate(connectionPrefab);
 		var connection = connectionGo.GetComponent<Connection>();
@@ -183,20 +213,23 @@ public class Node : MonoBehaviour
 		node.connections.Add(connection);
 		connectedNodes.Add(node);
 		node.connectedNodes.Add(this);
-		//is called when pressed on, deducts cost from gamelogic.turns
+		return connection;
 	}
 
-	public void SetType(typeEnum t)
+	public void SetType(modifierEnum m)
 	{
-		type = t;
-		switch (type)
+		modifier = m;
+		switch (modifier)
 		{
-			case typeEnum.water:
+			case modifierEnum.water:
 				sprite.sprite = waterSprite;
 				break;
-			case typeEnum.nutrients:
+
+			case modifierEnum.nutri:
+				Debug.Log("setting Nutri sprite");
 				sprite.sprite = NutrientSprite;
 				break;
+
 		}
 	}
 
