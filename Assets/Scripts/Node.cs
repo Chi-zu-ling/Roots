@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Node : MonoBehaviour
 {
@@ -83,6 +84,11 @@ public class Node : MonoBehaviour
 				if (c.GetOtherNode(this) == nearestConnectableNode)
 				{
 					connection = c;
+					if (modifier == modifierEnum.nutri)
+                    {
+						gamelogic.energy += 3;
+					}
+					gamelogic.UpdateUI();
 					break;
 				}
 			}
