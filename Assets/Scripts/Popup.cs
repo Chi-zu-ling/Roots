@@ -18,4 +18,9 @@ public class Popup : MonoBehaviour
 	{
 		label.text = $"-{node.cost} Energy";
 	}
+
+	public void Hide()
+	{
+		label.text = "";
+	}
 }
