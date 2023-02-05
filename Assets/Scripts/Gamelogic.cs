@@ -257,8 +257,8 @@ public class Gamelogic : MonoBehaviour
 
 
             case (Node.modifierEnum.nutri):
-                energy += 3;
-                Debug.Log("+ 3");
+                energy += 5;
+                Debug.Log("+ 5");
                 UpdateUI();
                 break;
 
@@ -278,7 +278,7 @@ public class Gamelogic : MonoBehaviour
 
         else if (water <= 0){
             water = 0;
-            GODescriptionText.text = "You wilted by lack of Water";
+            GODescriptionText.text = "You wilted from lack of Water";
             GameoVer();
         }
 

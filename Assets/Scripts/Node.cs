@@ -71,11 +71,11 @@ public class Node : MonoBehaviour
 			return;
 		}
 
-		gamelogic.adjustWater(-1);
 
 		gamelogic.score += 1;
 
 		gamelogic.doNodeModifiers(this);
+		gamelogic.adjustWater(-1);
 		gamelogic.energy -= effectiveCost;
 		if (gamelogic.energy <= 0)
 		{

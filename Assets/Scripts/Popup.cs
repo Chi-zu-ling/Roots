@@ -29,7 +29,7 @@ public class Popup : MonoBehaviour
 		}
 		if (node.modifier == Node.modifierEnum.nutri)
 		{
-			cost -= 3;
+			cost -= 5;
 		}
 		if (node.modifier == Node.modifierEnum.water)
 		{
