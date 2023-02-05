@@ -720,7 +720,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1068648868}
-  - {fileID: 1788639250}
   m_Father: {fileID: 845330268}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2631,7 +2630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: energy
-      value: 250
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: deadZone
@@ -2661,6 +2660,10 @@ PrefabInstance:
       propertyPath: energyText
       value: 
       objectReference: {fileID: 1052666813}
+    - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
+      propertyPath: nutriNodes
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: waterNodes
       value: 70

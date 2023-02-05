@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class Node : MonoBehaviour
 {
@@ -71,10 +70,11 @@ public class Node : MonoBehaviour
 			return;
 		}
 
-		gamelogic.doNodeModifiers(this);
 		gamelogic.adjustWater(-1);
-		gamelogic.energy -= effectiveCost;
 
+		gamelogic.doNodeModifiers(this);
+		gamelogic.energy -= effectiveCost;
+		gamelogic.UpdateUI();
 
 		// Connected to node
 		owner = "Player";
@@ -88,11 +88,6 @@ public class Node : MonoBehaviour
 				if (c.GetOtherNode(this) == nearestConnectableNode)
 				{
 					connection = c;
-					if (modifier == modifierEnum.nutri)
-                    {
-						gamelogic.energy += 3;
-					}
-					gamelogic.UpdateUI();
 					break;
 				}
 			}

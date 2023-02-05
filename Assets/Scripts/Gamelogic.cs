@@ -9,11 +9,10 @@ public class Gamelogic : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField] public int energy;
-    [SerializeField] public int water;
+    [SerializeField] public float water;
     [SerializeField] public int maxWater;
+
     [SerializeField] public int score = 0;
-    [SerializeField] public float currentWaterLevel;
-    [SerializeField] public float waterDrainRate = 0;
 
     [SerializeField] int maxNodes;
     [SerializeField] public int maxConnections;
@@ -96,7 +95,7 @@ public class Gamelogic : MonoBehaviour
 		}
 
         UpdateUI();
-        waterDrainRate = 0.1f;
+
         foreach(var connection in startNode.connections)
 		{
             var node = connection.GetOtherNode(startNode);
@@ -231,10 +230,10 @@ public class Gamelogic : MonoBehaviour
 
     public void UpdateUI()
     {
+
         energyText.text = energy.ToString();
         scoreText.text = score.ToString();
-        currentWaterLevel -= waterDrainRate;
-        waterLevelUI.fillAmount = currentWaterLevel; 
+        waterLevelUI.fillAmount = water/10; 
     }
 
 
@@ -247,18 +246,17 @@ public class Gamelogic : MonoBehaviour
         {
 
             case (Node.modifierEnum.basic):
-                Debug.Log("basic");
                 break;
 
 
             case (Node.modifierEnum.nutri):
-                Debug.Log("nutri");
                 energy += 3;
+                Debug.Log("+ 3");
+                UpdateUI();
                 break;
 
 
             case (Node.modifierEnum.water):
-                Debug.Log("water");
                 adjustWater(3);
                 break;
         }
@@ -276,7 +274,9 @@ public class Gamelogic : MonoBehaviour
         // you died by lack of water
         }
 
-        //set water UI 
+        //Debug.Log("W: " + water);
+
+        UpdateUI();
 
     }
 }
