@@ -26,11 +26,15 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         playerCam.orthographicSize = Mathf.Lerp(playerCam.orthographicSize, targetZoom, Time.deltaTime * 10f);
+        if (recentering)
+		{
+            playerCam.transform.position = Vector3.Lerp(playerCam.transform.position, recenterCoords, Time.deltaTime * 3f);
+        }
     }
 
     public void OnCameraPan(InputAction.CallbackContext context)
     {
-        
+        recentering = false;
         Vector2 MoveDirection = context.ReadValue<Vector2>();
         MoveDirection *= playerCam.orthographicSize;
         playerCam.transform.position = new Vector3(MoveDirection.x, MoveDirection.y, 0) * camSpeed + playerCam.transform.position;
@@ -61,7 +65,9 @@ public class CameraController : MonoBehaviour
 
     public void OnRecenterCamera()
     {
-        playerCam.transform.position = recenterCoords;
         targetZoom = defaultZoom;
+        recentering = true;
     }
+
+    bool recentering = false;
 }
