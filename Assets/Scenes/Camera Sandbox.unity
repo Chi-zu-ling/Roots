@@ -286,7 +286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: maxNodes
-      value: 500
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6508701836379064954, guid: 1571f8ebda9f4e844ae12c866d437a66, type: 3}
       propertyPath: playFieldSize

@@ -69,9 +69,9 @@ public class Gamelogic : MonoBehaviour
         var startNode = totalNodes[0];
         startNode.connectedToRoot = true;
         startNode.owner = "Player";
-        var connectedNodes = new List<Node>() { totalNodes[0] };
-        for (int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
-        {
+        var connectedNodes = new List<Node>() { startNode};
+        for(int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
+		{
             var node = connectedNodes[i];
             node.MakeConnections();
             foreach (var cNode in node.connectedNodes)
@@ -80,9 +80,17 @@ public class Gamelogic : MonoBehaviour
                 {
                     cNode.connectedToRoot = true;
                     connectedNodes.Add(cNode);
-                }
-            }
-        }
+				}
+			}
+		}
+
+        foreach(var connection in startNode.connections)
+		{
+            var node = connection.GetOtherNode(startNode);
+            connection.owner = "Player";
+            node.owner = "Player";
+            connection.GrowRoot(startNode);
+		}
     }
 
 
@@ -128,7 +136,7 @@ public class Gamelogic : MonoBehaviour
         }
 
         // 2 cost area
-        Collider2D[] twos = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.9f)));
+        Collider2D[] twos = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.6f)));
         foreach (var hit in twos)
         {
             Node node = hit.GetComponent<Node>();
@@ -136,7 +144,7 @@ public class Gamelogic : MonoBehaviour
         }
 
         //one cost area
-        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.7f)));
+        Collider2D[] ones = (Physics2D.OverlapCircleAll(new Vector2(0, 0), (playFieldSize * 0.3f)));
         foreach (var hit in ones)
         {
             Node node = hit.GetComponent<Node>();

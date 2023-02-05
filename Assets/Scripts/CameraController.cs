@@ -11,18 +11,21 @@ public class CameraController : MonoBehaviour
     private Camera playerCam;
     private Vector3 recenterCoords;
     private float defaultZoom;
+
+    float targetZoom;
     // Start is called before the first frame update
     void Start()
     {
         playerCam = GetComponent<Camera>();
         recenterCoords = playerCam.transform.position;
         defaultZoom = playerCam.orthographicSize;
+        targetZoom = defaultZoom;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        playerCam.orthographicSize = Mathf.Lerp(playerCam.orthographicSize, targetZoom, Time.deltaTime * 10f);
     }
 
     public void OnCameraPan(InputAction.CallbackContext context)
@@ -37,17 +40,17 @@ public class CameraController : MonoBehaviour
     public void OnCameraZoom(InputAction.CallbackContext context)
     {
         float MoveDirection = context.ReadValue<Vector2>().y;
-        if (playerCam.orthographicSize >= minZoom)
+        if (targetZoom >= minZoom)
         {
-            playerCam.orthographicSize += zoomSpeed * MoveDirection;
+            targetZoom += zoomSpeed * MoveDirection;
             //playerCam.transform.position = new Vector3(0, 0, MoveDirection) * camSpeed + playerCam.transform.position;
         }
         else if(MoveDirection > 0)
         {
-            playerCam.orthographicSize += zoomSpeed * MoveDirection;
+            targetZoom += zoomSpeed * MoveDirection;
             //playerCam.transform.position = new Vector3(0, 0, MoveDirection) * camSpeed + playerCam.transform.position;
         }
-        playerCam.orthographicSize = Mathf.Clamp(playerCam.orthographicSize, minZoom, 100);
+        targetZoom = Mathf.Clamp(targetZoom, minZoom, 100);
 
     }
 
@@ -59,6 +62,6 @@ public class CameraController : MonoBehaviour
     public void OnRecenterCamera()
     {
         playerCam.transform.position = recenterCoords;
-        playerCam.orthographicSize = defaultZoom;
+        targetZoom = defaultZoom;
     }
 }
