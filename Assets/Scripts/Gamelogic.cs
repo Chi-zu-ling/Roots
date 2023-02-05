@@ -9,11 +9,10 @@ public class Gamelogic : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField] public int energy;
-    [SerializeField] public int water;
+    [SerializeField] public float water;
     [SerializeField] public int maxWater;
+
     [SerializeField] public int score = 0;
-    [SerializeField] public float currentWaterLevel;
-    [SerializeField] public float waterDrainRate = 0;
 
     [SerializeField] int maxNodes;
     [SerializeField] public int maxConnections;
@@ -38,7 +37,13 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public TMP_Text energyText;
     [SerializeField] public TMP_Text scoreText;
     [SerializeField] public Image waterLevelUI;
-    
+    [SerializeField] public TMP_Text waterLabel;
+
+    [SerializeField] CameraController camCon;
+
+    [SerializeField] public GameObject GameOverPanel;
+    [SerializeField] public TMP_Text GOscoreText;
+    [SerializeField] public TMP_Text GODescriptionText;
 
     public void instantiatePlayGround() {
 
@@ -96,7 +101,7 @@ public class Gamelogic : MonoBehaviour
 		}
 
         UpdateUI();
-        waterDrainRate = 0.1f;
+
         foreach(var connection in startNode.connections)
 		{
             var node = connection.GetOtherNode(startNode);
@@ -231,10 +236,11 @@ public class Gamelogic : MonoBehaviour
 
     public void UpdateUI()
     {
+
         energyText.text = energy.ToString();
-        scoreText.text = score.ToString();
-        currentWaterLevel -= waterDrainRate;
-        waterLevelUI.fillAmount = currentWaterLevel; 
+        scoreText.text = $"Score: {score}";
+        waterLevelUI.fillAmount = water/10;
+        waterLabel.text = water.ToString();
     }
 
 
@@ -247,18 +253,17 @@ public class Gamelogic : MonoBehaviour
         {
 
             case (Node.modifierEnum.basic):
-                Debug.Log("basic");
                 break;
 
 
             case (Node.modifierEnum.nutri):
-                Debug.Log("nutri");
                 energy += 3;
+                Debug.Log("+ 3");
+                UpdateUI();
                 break;
 
 
             case (Node.modifierEnum.water):
-                Debug.Log("water");
                 adjustWater(3);
                 break;
         }
@@ -271,12 +276,24 @@ public class Gamelogic : MonoBehaviour
         if (water > maxWater){
             water = maxWater;}
 
-        else if (water < 0){
+        else if (water <= 0){
             water = 0;
-        // you died by lack of water
+            GODescriptionText.text = "You wilted by lack of Water";
+            GameoVer();
         }
 
-        //set water UI 
+        //Debug.Log("W: " + water);
+
+        UpdateUI();
+
+    }
+
+    public void GameoVer() {
+
+        camCon.OnRecenterCamera();
+        GOscoreText.text = $"Score: {score}";
+        UpdateUI();
+        GameOverPanel.SetActive(true);
 
     }
 }

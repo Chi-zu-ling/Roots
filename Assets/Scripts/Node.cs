@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class Node : MonoBehaviour
 {
@@ -30,14 +29,14 @@ public class Node : MonoBehaviour
 		water
 	}
 
-	enum ConnectionStatus
+	public enum ConnectionStatus
 	{
 		Direct,
 		Bridge,
 		None,
 	}
 
-	ConnectionStatus connectionStatus = ConnectionStatus.None;
+	public ConnectionStatus connectionStatus = ConnectionStatus.None;
 	Node nearestConnectableNode;
 
 	// Start is called before the first frame update
@@ -68,13 +67,22 @@ public class Node : MonoBehaviour
 		// check for sufficient funds
 		if (gamelogic.energy < effectiveCost)
 		{
+			gamelogic.energy = 0;
 			return;
 		}
 
-		gamelogic.doNodeModifiers(this);
 		gamelogic.adjustWater(-1);
-		gamelogic.energy -= effectiveCost;
 
+		gamelogic.score += 1;
+
+		gamelogic.doNodeModifiers(this);
+		gamelogic.energy -= effectiveCost;
+		if (gamelogic.energy <= 0)
+		{
+			gamelogic.GODescriptionText.text = "No more energy to extend roots";
+			gamelogic.GameoVer();
+		}
+		gamelogic.UpdateUI();
 
 		// Connected to node
 		owner = "Player";
@@ -88,11 +96,6 @@ public class Node : MonoBehaviour
 				if (c.GetOtherNode(this) == nearestConnectableNode)
 				{
 					connection = c;
-					if (modifier == modifierEnum.nutri)
-                    {
-						gamelogic.energy += 3;
-					}
-					gamelogic.UpdateUI();
 					break;
 				}
 			}
@@ -102,6 +105,8 @@ public class Node : MonoBehaviour
 			connection.gameObject.name = "Fresh Connection";
 			connection.Start();
 		}
+
+		gamelogic.UpdateUI();
 		connectionStatus = ConnectionStatus.None;
 		Highlight(Color.blue);
 		nearestConnectableNode.DisableHighlight();
@@ -168,7 +173,6 @@ public class Node : MonoBehaviour
 			connectionStatus = ConnectionStatus.None;
 			Highlight(Color.red);
 		}
-		Popup.instance.gameObject.SetActive(true);
 		Popup.instance.DisplayNodeInfo(this);
 		//Popup.instance.transform.position = Camera.main.WorldToScreenPoint(transform.position);
 
@@ -181,7 +185,7 @@ public class Node : MonoBehaviour
 		{
 			node.DisableHighlight();
 		}
-		Popup.instance.gameObject.SetActive(false);
+		Popup.instance.Hide();
 	}
 
 	public void MakeConnections()
