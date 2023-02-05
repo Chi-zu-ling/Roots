@@ -37,6 +37,7 @@ public class Gamelogic : MonoBehaviour
     [SerializeField] public TMP_Text energyText;
     [SerializeField] public TMP_Text scoreText;
     [SerializeField] public Image waterLevelUI;
+    [SerializeField] public TMP_Text waterLabel;
     
 
     public void instantiatePlayGround() {
@@ -233,7 +234,8 @@ public class Gamelogic : MonoBehaviour
 
         energyText.text = energy.ToString();
         scoreText.text = $"Score: {score}";
-        waterLevelUI.fillAmount = water/10; 
+        waterLevelUI.fillAmount = water/10;
+        waterLabel.text = water.ToString();
     }
 
 
