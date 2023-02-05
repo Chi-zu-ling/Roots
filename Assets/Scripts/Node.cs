@@ -19,21 +19,14 @@ public class Node : MonoBehaviour
 
 	public string owner = "";
 
-	public typeEnum type;
-	public modifierEnum modifier;
 
-	public enum typeEnum
-	{
-		basic,
-		water,
-		nutrients
-	}
+	public modifierEnum modifier;
 
 	public enum modifierEnum
 	{
 		basic,
-		turn,
-		multi
+		nutri,
+		water
 	}
 
 	enum ConnectionStatus
@@ -80,6 +73,7 @@ public class Node : MonoBehaviour
 					owner = neighbour.owner;
 					gamelogic.energy -= effectiveCost;
 					Debug.Log(gamelogic.energy);
+					gamelogic.doNodeModifiers(this);
 					break;
 				}
 			}
@@ -183,17 +177,20 @@ public class Node : MonoBehaviour
 		//is called when pressed on, deducts cost from gamelogic.turns
 	}
 
-	public void SetType(typeEnum t)
+	public void SetType(modifierEnum m)
 	{
-		type = t;
-		switch (type)
+		modifier = m;
+		switch (modifier)
 		{
-			case typeEnum.water:
+			case modifierEnum.water:
 				sprite.sprite = waterSprite;
 				break;
-			case typeEnum.nutrients:
+
+			case modifierEnum.nutri:
+				Debug.Log("setting Nutri sprite");
 				sprite.sprite = NutrientSprite;
 				break;
+
 		}
 	}
 

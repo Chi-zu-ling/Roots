@@ -18,8 +18,7 @@ public class Gamelogic : MonoBehaviour
 
     [SerializeField] int waterNodes;
 
-    [SerializeField] int turnNodes;
-    [SerializeField] int multNodes;
+    [SerializeField] int nutriNodes;
 
     List<Node> totalNodes = new List<Node>();
 
@@ -29,7 +28,8 @@ public class Gamelogic : MonoBehaviour
 
     public Node node;
 
-    public void instantiatePlayGround() {
+    public void instantiatePlayGround()
+    {
 
         //change some of the instantiated nodes to "water" type
         //change some "basic" type nodes 
@@ -38,7 +38,8 @@ public class Gamelogic : MonoBehaviour
         Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
         totalNodes.Add(startNode);
 
-        for (int mn = 0; mn < maxNodes-1; mn++) {
+        for (int mn = 0; mn < maxNodes - 1; mn++)
+        {
 
             //get random position on playingField
             Vector2 newNodeposition = findNewNodePosition();
@@ -46,72 +47,53 @@ public class Gamelogic : MonoBehaviour
             totalNodes.Add(newNode);
         }
 
-        foreach(Node node in totalNodes)
-		{
+        foreach (Node node in totalNodes)
+        {
             node.gamelogic = this;
-		}
+        }
 
     }
 
-	private void Awake()
-	{
+    private void Awake()
+    {
         Debug.Log(energy);
-	}
+    }
 
 
-	void Start()
+    void Start()
     {
         instantiatePlayGround();
         createCostAreas();
-        makeNodeTypes();
         makeNodeModifiers();
 
         var startNode = totalNodes[0];
         startNode.connectedToRoot = true;
         startNode.owner = "Player";
         var connectedNodes = new List<Node>() { totalNodes[0] };
-        for(int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
-		{
+        for (int i = 0; i < connectedNodes.Count && connectedNodes.Count < totalNodes.Count; i++)
+        {
             var node = connectedNodes[i];
             node.MakeConnections();
-            foreach(var cNode in node.connectedNodes)
-			{
+            foreach (var cNode in node.connectedNodes)
+            {
                 if (!cNode.connectedToRoot)
-				{
+                {
                     cNode.connectedToRoot = true;
                     connectedNodes.Add(cNode);
-				}
-			}
-		}
-    }
-
-
-    public void instantiatePlayGround() {
-
-        //change some of the instantiated nodes to "water" type
-        //change some "basic" type nodes 
-
-        Node startNode = Instantiate(node, new Vector2(0, 0), node.transform.rotation, this.transform);
-        totalNodes.Add(startNode);
-
-        for (int mn = 0; mn < maxNodes-1; mn++) {
-
-            //get random position on playingField
-            Vector2 newNodeposition = findNewNodePosition();
-            Node newNode = Instantiate(node, newNodeposition, node.transform.rotation, this.transform);
-            totalNodes.Add(newNode);
-
+                }
+            }
         }
-
     }
 
 
-    Vector2 findNewNodePosition() {
+
+    Vector2 findNewNodePosition()
+    {
         Vector2 newPosition = Random.insideUnitCircle * playFieldSize;
 
         checkOverlap(newPosition);
 
-        while(checkOverlap(newPosition))
+        while (checkOverlap(newPosition))
         {
             newPosition = Random.insideUnitCircle * playFieldSize;
         }
@@ -120,7 +102,8 @@ public class Gamelogic : MonoBehaviour
     }
 
 
-    public bool checkOverlap(Vector2 newPosition) {
+    public bool checkOverlap(Vector2 newPosition)
+    {
 
         //check position for any other nodes
         Collider2D[] hits = (Physics2D.OverlapCircleAll(newPosition, deadZone));
@@ -132,11 +115,12 @@ public class Gamelogic : MonoBehaviour
             }
         }
         return false;
-       
+
     }
 
 
-    public void createCostAreas() {
+    public void createCostAreas()
+    {
         // 3 cost area
         foreach (Node node in totalNodes)
         {
@@ -159,13 +143,16 @@ public class Gamelogic : MonoBehaviour
             node.cost = 1;
         }
 
-        foreach (Node node in totalNodes) {
+        foreach (Node node in totalNodes)
+        {
 
-            if (node.cost == 3) {
+            if (node.cost == 3)
+            {
                 threesList.Add(node);
             }
 
-            else if (node.cost == 2) {
+            else if (node.cost == 2)
+            {
                 twosList.Add(node);
             }
 
@@ -175,72 +162,75 @@ public class Gamelogic : MonoBehaviour
     }
 
 
-    public void makeNodeTypes() {
+    public void makeNodeModifiers()
+    {
+
+        //might not ed up with exatly as many a specified, as they can be overwritten
 
         for (int w = 0; w < waterNodes; w++)
         {
             int r = Random.Range(0, totalNodes.Count);
-            totalNodes[r].type = Node.typeEnum.water;
-            totalNodes[r].SetType(Node.typeEnum.water);
-        }
-
-    }
-
-
-    public void makeNodeModifiers(){
-        
-        //might not ed up with exatly as many a specified, as they can be overwritten
-
-        for (int t = 0; t < turnNodes; t++) {
-            int r = Random.Range(0, 100);
-
-            if (r > 50) {
-                Node target = getRandomFromList(threesList);
-                target.modifier = Node.modifierEnum.turn;
-            }
-
-            else if (r < 15) {
-                Node target = getRandomFromList(onesList);
-                target.modifier = Node.modifierEnum.turn;
-            }
-
-            else {
-                Node target = getRandomFromList(twosList);
-                target.modifier = Node.modifierEnum.turn;
-            }
+            totalNodes[r].modifier = Node.modifierEnum.water;
+            totalNodes[r].SetType(Node.modifierEnum.water);
         }
 
 
-        for (int m = 0; m < multNodes; m++)
+        for (int m = 0; m < nutriNodes; m++)
         {
             int r = Random.Range(0, 100);
 
-            if (r > 50)
-            {
+            if (r > 50){
                 Node target = getRandomFromList(threesList);
-                target.modifier = Node.modifierEnum.multi;
+                target.modifier = Node.modifierEnum.nutri;
+                totalNodes[r].SetType(Node.modifierEnum.nutri);
             }
 
-            else if (r < 15)
-            {
+            else if (r < 15){
                 Node target = getRandomFromList(onesList);
-                target.modifier = Node.modifierEnum.multi;
+                target.modifier = Node.modifierEnum.nutri;
+                totalNodes[r].SetType(Node.modifierEnum.nutri);
             }
 
-            else
-            {
+            else{
                 Node target = getRandomFromList(twosList);
-                target.modifier = Node.modifierEnum.multi;
+                target.modifier = Node.modifierEnum.nutri;
+                totalNodes[r].SetType(Node.modifierEnum.nutri);
             }
         }
 
     }
 
 
-    public Node getRandomFromList(List<Node> nodeList) {
+    public Node getRandomFromList(List<Node> nodeList)
+    {
         int r = Random.Range(0, nodeList.Count);
         Node returnNode = nodeList[r];
         return returnNode;
     }
 
+
+    public void doNodeModifiers(Node node)
+    {
+
+        Node.modifierEnum modifier = node.modifier;
+
+        switch (modifier)
+        {
+
+            case (Node.modifierEnum.basic):
+                Debug.Log("basic");
+                break;
+
+
+            case (Node.modifierEnum.nutri):
+                Debug.Log("nutri");
+                energy += 3;
+                break;
+
+
+            case (Node.modifierEnum.water):
+                Debug.Log("water");
+                break;
+        }
+    }
 }
